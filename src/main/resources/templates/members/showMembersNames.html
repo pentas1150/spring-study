@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org">
+
+<body>
+<div class="container">
+    <div th:if="${membersNames.length > 0}">
+        <h1>멤버 목록</h1>
+        <ul th:each="name : ${membersNames}">
+            <li th:text="${name}"></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
