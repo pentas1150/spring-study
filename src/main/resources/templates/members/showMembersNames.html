@@ -3,10 +3,10 @@
 
 <body>
 <div class="container">
-    <div th:if="${membersNames.length > 0}">
+    <div th:if="${members.size() > 0}">
         <h1>멤버 목록</h1>
-        <ul th:each="name : ${membersNames}">
-            <li th:text="${name}"></li>
+        <ul th:each="m : ${members}">
+            <li th:text="${m.name}"></li>
         </ul>
     </div>
 </div>

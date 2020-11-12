@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Controller
@@ -26,12 +30,25 @@ public class MemberController {
 //    public void setMemberService(MemberService memberService) {
 //        this.memberService = memberService;
 //    }
-    @GetMapping("/members")
-    public String showAllMemebers(Model model) {
-        List<Member> members = memberService.findMembers();
-        String[] membersNames = members.stream().map(Member::getName).toArray(String[]::new);
+    @GetMapping("/member/{id}")
+    public String getMember(@PathVariable("id") Long memberId) {
+        Optional<Member> member = memberService.findOne(memberId);
+        member.ifPresent(m -> System.out.println("findOne : " + m.getName()));
 
-        model.addAttribute("membersNames", membersNames);
+        List<Member> members = memberService.findMembers();
+        System.out.println("members size : " + members.size());
+        members.forEach(m -> System.out.println("findAll : " + m.getName()));
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/members")
+    public String showAllMembers(Model model) {
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+//        Member[] membersArr = members.toArray(Member[]::new);
+//        String[] membersNames = members.stream().map(Member::getName).toArray(String[]::new);
+//        model.addAttribute("membersNames", membersNames);
 
         return "members/showMembersNames";
     }
@@ -43,6 +60,7 @@ public class MemberController {
 
     @PostMapping("/members/new")
     public String create(MemberForm form) {
+        System.out.println("POST");
         Member member = new Member();
         member.setName(form.getName());
 
@@ -50,4 +68,5 @@ public class MemberController {
 
         return "redirect:/";
     }
+
 }
