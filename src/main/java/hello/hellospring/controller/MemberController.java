@@ -3,6 +3,7 @@ package hello.hellospring.controller;
 import hello.hellospring.domain.Member;
 import hello.hellospring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,17 +43,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("/members")
-    public String showAllMembers(Model model) {
-        List<Member> members = memberService.findMembers();
-        model.addAttribute("members", members);
-//        Member[] membersArr = members.toArray(Member[]::new);
-//        String[] membersNames = members.stream().map(Member::getName).toArray(String[]::new);
-//        model.addAttribute("membersNames", membersNames);
-
-        return "members/showMembersNames";
-    }
-
     @GetMapping("/members/new")
     public String createForm() {
         return "members/createMemberForm";
@@ -60,13 +50,23 @@ public class MemberController {
 
     @PostMapping("/members/new")
     public String create(MemberForm form) {
-        System.out.println("POST");
         Member member = new Member();
         member.setName(form.getName());
 
         memberService.join(member);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/members")
+    public String list(Model model) {
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+//        Member[] membersArr = members.toArray(Member[]::new);
+//        String[] membersNames = members.stream().map(Member::getName).toArray(String[]::new);
+//        model.addAttribute("membersNames", membersNames);
+
+        return "members/memberList";
     }
 
 }
